@@ -1,0 +1,11 @@
+{
+  "OpenAi": {
+    "OpenAiEndpoint": "https://***.openai.azure.com/",
+    "OpenAiKey": "***",
+    "OpenAiModelDeployment": "gpt-4",
+    "Temperature": "0"
+  },
+  "LogicApp": {
+    "LogicAppEndpoint": "https://*****.azurewebsites.net/api/ProcessExpense?code==="
+  }
+}
