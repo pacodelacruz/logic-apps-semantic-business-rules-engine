@@ -1,0 +1,180 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Call_the_semantic_BRE_workflow": {
+                "inputs": {
+                    "body": "@body('Parse_expense_claim_as_JSON')",
+                    "host": {
+                        "workflow": {
+                            "id": "http-semantic-bre"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Parse_expense_claim_as_JSON": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Workflow"
+            },
+            "Compose_expense_assessment_output": {
+                "inputs": {
+                    "assessmentOutput": "@body('Parse_BRE_assessment_response_as_JSON')",
+                    "expenseInput": "@body('Parse_expense_claim_as_JSON')"
+                },
+                "runAfter": {
+                    "Parse_BRE_assessment_response_as_JSON": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Compose"
+            },
+            "Delete_original_expense_claim_file_from_blob_container": {
+                "inputs": {
+                    "parameters": {
+                        "blobName": "@triggerBody()?['name']",
+                        "containerName": "@triggerBody()?['containerInfo']?['name']"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "deleteBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {
+                    "Compose_expense_assessment_output": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ServiceProvider"
+            },
+            "Parse_BRE_assessment_response_as_JSON": {
+                "inputs": {
+                    "content": "@body('Call_the_semantic_BRE_workflow')",
+                    "schema": {
+                        "properties": {
+                            "expenseId": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "statusReason": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "Call_the_semantic_BRE_workflow": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Parse_expense_claim_as_JSON": {
+                "inputs": {
+                    "content": "@body('Read_expense_claim_blob_content')?['content']",
+                    "schema": {
+                        "properties": {
+                            "amount": {
+                                "type": "number"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "date": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "employeeId": {
+                                "type": "string"
+                            },
+                            "employeeLevel": {
+                                "type": "string"
+                            },
+                            "employeeName": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "Read_expense_claim_blob_content": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Read_expense_claim_blob_content": {
+                "inputs": {
+                    "parameters": {
+                        "blobName": "@triggerBody()?['name']",
+                        "containerName": "@triggerBody()?['containerInfo']?['name']",
+                        "inferContentType": true
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "readBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {},
+                "type": "ServiceProvider"
+            },
+            "Save_BRE_assessment_output_to_blob_container": {
+                "inputs": {
+                    "parameters": {
+                        "blobName": "@{body('Parse_BRE_assessment_response_as_JSON')?['status']}/@{triggerBody()?['name']}",
+                        "containerName": "output",
+                        "content": "@outputs('Compose_expense_assessment_output')",
+                        "overrideIfExists": "true"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "uploadBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {
+                    "Delete_original_expense_claim_file_from_blob_container": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ServiceProvider"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_an_expense_claim_is_added_or_updated": {
+                "inputs": {
+                    "parameters": {
+                        "path": "input"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "whenABlobIsAddedOrModified",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "type": "ServiceProvider"
+            }
+        }
+    },
+    "kind": "Stateful"
+}
