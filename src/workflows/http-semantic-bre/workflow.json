@@ -1,0 +1,92 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Read_BRE_Context_Prompt": {
+                "inputs": {
+                    "parameters": {
+                        "blobName": "bre-context-prompt.txt",
+                        "containerName": "business-rules"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "readBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {},
+                "type": "ServiceProvider"
+            },
+            "Read_BRE_Rules": {
+                "inputs": {
+                    "parameters": {
+                        "blobName": "bre-rules-prompt.txt",
+                        "containerName": "business-rules"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "readBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {
+                    "Read_BRE_Context_Prompt": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ServiceProvider"
+            },
+            "Return_Semantic_BRE_Response": {
+                "inputs": {
+                    "body": "@body('Send_Semantic_BRE_Prompt_to_Open_AI_and_Receive_Result')?['content']",
+                    "statusCode": 200
+                },
+                "kind": "Http",
+                "runAfter": {
+                    "Send_Semantic_BRE_Prompt_to_Open_AI_and_Receive_Result": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Response"
+            },
+            "Send_Semantic_BRE_Prompt_to_Open_AI_and_Receive_Result": {
+                "inputs": {
+                    "parameters": {
+                        "deploymentId": "gpt-4o",
+                        "messages": [
+                            {
+                                "content": "@{body('Read_BRE_Context_Prompt')?['content']}\\n@{body('Read_BRE_Rules')?['content']}",
+                                "role": "System"
+                            },
+                            {
+                                "content": "@{triggerBody()}",
+                                "role": "User"
+                            }
+                        ],
+                        "temperature": 0
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "openai",
+                        "operationId": "getChatCompletions",
+                        "serviceProviderId": "/serviceProviders/openai"
+                    }
+                },
+                "runAfter": {
+                    "Read_BRE_Rules": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ServiceProvider"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "kind": "Stateful"
+}
