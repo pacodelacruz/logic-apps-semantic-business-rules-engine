@@ -1,3 +1,3 @@
-# openai-business-rules-engine-demo
+# logic-apps-semantic-business-rules-engine
 
-A sample application of how to implement a business rules engine based on business rules in natural laguange using Azure Functions and Open AI.  
+A sample application of how to implement a semantic business rules engine using Azure Logic Apps and Open AI
