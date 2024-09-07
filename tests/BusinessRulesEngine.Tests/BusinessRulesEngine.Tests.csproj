@@ -35,7 +35,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
+    <None Update="TestData\Expenses\Flight-Boss-BNE-DFW-3501-M.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Expenses\Flight-Boss-BNE-DFW-3501.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Flight-Boss-BNE-LAX-3499-A.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Flight-Boss-HBA-CBR-2500-A.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Flight-Boss-HBA-CBR-2501-M.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Flight-Manager-MEL-PER-1600-R.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Expenses\Flight-Manager-MEL-PER-1600.json">
@@ -50,6 +65,15 @@
     <None Update="TestData\Expenses\Flight-Boss-HBA-CBR-2500.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\Expenses\Flight-Manager-MEL-SYD-1000-A.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Flight-Manager-SYD-AKL-3000-M.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Flight-Manager-SYD-AKL-3001-R.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Expenses\Flight-Manager-SYD-AKL-3001.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -59,6 +83,15 @@
     <None Update="TestData\Expenses\Flight-Manager-MEL-SYD-1000.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\Expenses\Meal-Boss-Above1000-R.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Meal-Boss-Above50-A.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Meal-Manager-Above50-R.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Expenses\Meal-Manager-Above50.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -66,6 +99,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Expenses\Meal-Boss-Above50.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Meal-Manager-Under50-A.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Expenses\Meal-Manager-Under50-Weekend-M.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestData\Expenses\Meal-Manager-Under50.json">

@@ -1,18 +1,14 @@
-using BusinessRulesEngine.FunctionApp.Models;
 using BusinessRulesEngine.Tests.Models;
-using BusinessRulesEngine.FunctionApp.Services;
 using BusinessRulesEngine.Tests.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
+using BusinessRulesEngine.Test.Models;
 
 namespace BusinessRulesEngine.Tests
 {
@@ -57,19 +53,18 @@ namespace BusinessRulesEngine.Tests
         }
 
         [Theory]
-        [InlineData("Meal-Manager-Under50.json", "Approved", false)]
-        [InlineData("Meal-Manager-Above50.json", "Rejected", true)]
-        [InlineData("Meal-Manager-Under50-Weekend.json", "RequiresManualApproval", true)]
-        [InlineData("Meal-Boss-Above50.json", "Approved", false)]
-        [InlineData("Meal-Boss-Above1000.json", "Rejected", true)]
-        [InlineData("Flight-Manager-MEL-SYD-1000.json", "Approved", false)]
-        [InlineData("Flight-Manager-MEL-PER-1600.json", "Rejected", true)]
-        [InlineData("Flight-Manager-SYD-AKL-3000.json", "RequiresManualApproval", true)]
-        [InlineData("Flight-Manager-SYD-AKL-3001.json", "Rejected", true)]
-        [InlineData("Flight-Boss-HBA-CBR-2500.json", "Approved", false)]
-        [InlineData("Flight-Boss-HBA-CBR-2501.json", "RequiresManualApproval", true)]
-        [InlineData("Flight-Boss-BNE-LAX-3499.json", "Approved", false)]
-        [InlineData("Flight-Boss-BNE-DFW-3501.json", "RequiresManualApproval", true)]
+        [InlineData("Flight-Boss-BNE-DFW-3501-M.json", "RequiresManualApproval", true)]
+        [InlineData("Flight-Boss-BNE-LAX-3499-A.json", "Approved", false)]
+        [InlineData("Flight-Boss-HBA-CBR-2500-A.json", "Approved", false)]
+        [InlineData("Flight-Boss-HBA-CBR-2501-M.json", "RequiresManualApproval", true)]
+        [InlineData("Flight-Manager-MEL-PER-1600-R.json", "Rejected", true)]
+        [InlineData("Flight-Manager-MEL-SYD-1000-A.json", "Approved", false)]
+        [InlineData("Flight-Manager-SYD-AKL-3000-M.json", "RequiresManualApproval", true)]
+        [InlineData("Meal-Boss-Above1000-R.json", "Rejected", true)]
+        [InlineData("Meal-Boss-Above50-A.json", "Approved", false)]
+        [InlineData("Meal-Manager-Above50-R.json", "Rejected", true)]
+        [InlineData("Meal-Manager-Under50-A.json", "Approved", false)]
+        [InlineData("Meal-Manager-Under50-Weekend-M.json", "RequiresManualApproval", true)]
         public async Task TestExpenses(string payloadFileName, string expectedStatus, bool requiresStatusReason = false)
         {
             _consoleLogger.Log(LogLevel.Information, $"Testing PayloadFileName: {payloadFileName}");

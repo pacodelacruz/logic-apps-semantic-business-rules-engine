@@ -23,8 +23,8 @@ namespace BusinessRulesEngine.Tests.Helpers
             {
                 throw new ArgumentException($"Could not find file at path: {path}");
             }
-
-            return File.ReadAllText(path);
+            // Stating Unicode explicitly so it does not require a BOM. 
+            return File.ReadAllText(path, Encoding.UTF8);
         }
     }
 }
